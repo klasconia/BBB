@@ -178,7 +178,7 @@ var Mgr = (function(){
             _chapters.push(Mgr.Bookmark(_c));
             _hasTocChanged = true;
         },
-        // Add a chapter
+        // Remove a chapter
         removeChapter: function(_idx){
             _chapters.splice(_idx, 1);
             _hasTocChanged = true;
