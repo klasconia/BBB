@@ -1,8 +1,9 @@
 /*
  * 	BBB v0.1
  * 		By Steven Weerdenburg and Kevin Lasconia
- * 		Last Modification: 11/08/2010
+ * 		Last Modification: 11/13/2010
  */
+
 var Mgr = (function(){
     var _chapters = []; // Array of Chapters/Bookmarks
     var _vid = 0, _toc = 0; // id to store the table of contents and video player
@@ -14,7 +15,7 @@ var Mgr = (function(){
     var _playSeq = 0;
     
     var canVideo = !!document.createElement('video').play;
-    
+		
     return {
         // A Bookmark object for the manager to work with
         Bookmark: function(params) {
@@ -119,48 +120,29 @@ var Mgr = (function(){
                             }
                         }
                     }
-                    
                     return Mgr.Bookmark(obj);
                 }
             }
         },
         fetchBookmarks: function() {
             // Stub code, will eventually get bookmarks from server call
-            
-            Mgr.addChapter({
-                src: 'http://upload.wikimedia.org/wikipedia/commons/7/75/Big_Buck_Bunny_Trailer_400p.ogg',
-                title: 'Big Buck Bunny',
-                description: 'An animated video',
-                startTime: 5,
-                endTime: 14});
-                
-            Mgr.addChapter({
-                src: 'http://www.archive.org/download/deadmandirewolffanclub/DireWolfFanClub.ogv',
-                title: 'Dire Wolf Fan Club',
-                description: 'An unusual video',
-                startTime: 10,
-                endTime: 29});
-                
-            Mgr.addChapter({
-                src: 'http://jbuckley.ca/~hoops/elephant.ogv',
-                title: 'Elephants Dream',
-                description: 'Elephants',
-                startTime: 145,
-                endTime: 200});
-                
-            Mgr.addChapter({
-                src: 'http://www.archive.org/download/Kinetic_Art_Demo_Video/nym.ogv',
-                title: 'Kinetic Art',
-                description: 'Domino fun',
-                startTime: 60,
-                endTime: 66});
-                
-            Mgr.addChapter({
-                src: 'http://ftp.gnu.org/video/Stephen_Fry-Happy_Birthday_GNU-hq_600px_780kbit.ogv',
-                title: 'Freedom Fry',
-                description: 'Happy B-Day',
-                startTime: 1,
-                endTime: 60});
+			// Now uses HTML5 local storage to simulate server calls	
+            var i = 0;
+            var bmListLength = localStorage.length - 1;
+				
+            for (i = 0; i <= bmListLength; i++) {
+				var key = localStorage.key(i);
+				var bookmark = JSON.parse(localStorage.getItem(key));
+				if (!isNaN(bookmark.startTime) || !isNaN(bookmark.endTime)) {
+					Mgr.addChapter({
+						src: bookmark.src,
+						title: bookmark.title,
+						description: bookmark.description,
+						startTime: bookmark.startTime,
+						endTime: bookmark.endTime
+					}, false);
+				}		
+			}               
         },
         // (Re-)initialize all values except internal element pointers
         init: function(vidId, tocId, updateEvent, canPlayEvent){
@@ -174,7 +156,10 @@ var Mgr = (function(){
             Mgr.fetchBookmarks();
         },
         // Add a chapter
-        addChapter: function(_c){
+        addChapter: function(_c, _n){
+			if (_n) {
+				localStorage.setItem(_c.title, JSON.stringify(_c));
+			}			
             _chapters.push(Mgr.Bookmark(_c));
             _hasTocChanged = true;
         },
