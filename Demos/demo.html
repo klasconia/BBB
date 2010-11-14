@@ -15,13 +15,14 @@
                 title: document.getElementById('bkmrkTitle').value,
                 description: document.getElementById('bkmrkDescription').value,
                 startTime: document.getElementById('bkmrkStart').value,
-                endTime: document.getElementById('bkmrkEnd').value});
+                endTime: document.getElementById('bkmrkEnd').value}, true);
                 
             Mgr.printTOC();
         }
         
         function init(){
             Mgr.init("player", "tblOfContents");
+			//localStorage.clear();
         }
         
         function setCookie(name, value, expDays){
@@ -56,9 +57,7 @@
         }
         </script>
         <style>
-            #panel {
-                display: none;
-            }
+
         </style>
         <link rel="stylesheet" href="css/video-js.css" type="text/css" media="screen" title="Video JS">
     </head>
@@ -140,9 +139,9 @@
             </table></div>
         </div>
         <script>
-            $("button").click(function(){
+            /*$("button").click(function(){
                 $("#panel").slideToggle("slow");
-            });
+            });*/
         </script>
     </body>
 </html>
